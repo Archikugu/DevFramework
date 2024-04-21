@@ -1,4 +1,6 @@
 ﻿using DevFramework.Core.Aspects.PostSharp;
+using DevFramework.Core.Aspects.PostSharp.TransactionAspects;
+using DevFramework.Core.Aspects.PostSharp.ValidationAspects;
 using DevFramework.Core.CrossCuttingConcerns.Validation.FluentValidation;
 using DevFramework.Northwind.Business.Abstract;
 using DevFramework.Northwind.Business.ValidationRules.FluentValidation;
@@ -9,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DevFramework.Northwind.Business.Concrete.Managers
 {
@@ -42,6 +45,14 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
         {
             //ValidatorTool.FluentValidate(new ProductValidator(), product);
             return _productDal.Update(product);
+        }
+
+        [TransactionScopeAspect]
+        public void TransactionalOperation(Product product1, Product product2)
+        {
+            _productDal.Add(product1);
+            // Business Codes
+            _productDal.Update(product2);
         }
     }
 }
