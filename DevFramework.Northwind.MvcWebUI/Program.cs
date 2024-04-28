@@ -4,6 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+builder.Logging.ClearProviders();
+builder.Logging.AddLog4Net();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
